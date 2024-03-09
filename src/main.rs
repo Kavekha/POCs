@@ -1,10 +1,10 @@
 fn main() {
-    let world = World::new();
-    generate_story(world);
+    let mut world = World::new();
+    generate_story(&mut world);
 }
 
 
-pub fn generate_story(world: World){
+pub fn generate_story(world: &mut World){
     println!("--- Fake-generated Mission ---");
 
     println!("Fixer says:");
@@ -20,10 +20,22 @@ pub fn generate_story(world: World){
     println!("===========================");
     println!("");
 
-    let mission = Mission::new();
-    mission.add_target(world.create_character());
+    let mut mission = generate_mission();
+
+    let mut target = world.create_character();
+    //println!("target is {:?}", *target);
+    mission.add_target(target);
+    //mission.add_target(world.create_character());
+    let mut other_target = world.create_character();
+    mission.add_target(other_target);
+
 }
 
+pub fn generate_mission(
+) -> Mission {
+    let mut mission = Mission::new();
+    return mission
+}
 
 
 pub struct Mission{
@@ -38,8 +50,8 @@ impl Mission{
         };
         return mission 
     }
-    pub fn add_target(mut self, target: Character) {
-        self.targets.push(target);
+    pub fn add_target(&mut self, target: Character) {
+        self.targets.push(target.clone());
     }
     pub fn briefing(self){
         println!("This is a briefing from this mission");
@@ -60,11 +72,12 @@ impl World{
         };
         return world
     }
-    pub fn create_character(mut self) -> Character {
+    pub fn create_character(&mut self) -> Character {
         let character = Character {};
         self.last_char_id += 1;
         self.characters.push(character.clone());
-        return character
+        //self.characters.push(character.clone());
+        return character.clone()
     }
 }
 
