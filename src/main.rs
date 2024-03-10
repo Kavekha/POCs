@@ -1,5 +1,12 @@
 use rand::prelude::*;
 
+//v1. Generer une mission avec du contenu aleatoire, avec une forme de cohérence. Se traduit en briefing + elements gameplay exploitables.
+//v2. Generer plusieurs missions, avec du contenu créé ou réutilisé, qui conserve sa coherence, et avec une progression dans l'apparence de difficulté.
+//v3. Forcer la generation des missions autour d'une thématique "compagne", c'est à dire une continuité dans les personnages et factions impliquées.
+//v4. Diviser les Missions en scenario, avec des segments / objectifs intermediaires pour permettre une progression de l'intrigue dans le cadre de cette mission.
+
+
+// 
 fn main() {
     let mut world = World::new();
     generate_story(&mut world);
@@ -13,7 +20,7 @@ pub fn generate_story(world: &mut World){
     println!("Our client wants to remain anonym so we will call him 'Mr Johnson' as usual.");   // OK // TODO : pronouns
     println!("I'll be sure to apply the anonymous fee on him.");    // OK // TODO : Pronouns, payment modifier
     println!("The target is Meathead, an ancient member of the Hell Angels gang going solo on the drug trade.");    // OK 
-    println!("From the infos given by our mr Johnson, Meathead's hideout is in Anoubarak Station, abandonned a long time ago.");    // NOK : //TODO : Hint & details on it. // Location
+    println!("From the infos given by our mr Johnson, Meathead's hideout is in Anoubarak Station, abandonned a long time ago.");    //OK
     println!("He's there with some friends and maybe a few locals he recruited to start his business.");    // NOK : //TODO : Hint on target army / antagonists.
     println!("Kill him and come back in on piece to get paid.");
     println!("Budget is 3000 nuyens, 1000 in advance, plus a 400 nuyens fee for not being polite enough");
