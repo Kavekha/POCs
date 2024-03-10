@@ -39,7 +39,9 @@ pub fn generate_story(world: &mut World){
     mission.set_objective(MissionType::Assassination);
     //Payment
     mission.set_payment(3000);
-
+    //Location
+    let location = world.generate_location();
+    mission.add_location(location);
     //Read debriefing.
     mission.briefing();
 
@@ -80,7 +82,8 @@ pub struct Mission{
     client: Option<Character>,
     fixer: Option<Character>,
     mission_type: Option<MissionType>,
-    base_payment: i32
+    base_payment: i32,
+    location: Option<Location>
 }
 impl Mission{
     pub fn new() -> Mission {
@@ -91,6 +94,7 @@ impl Mission{
             fixer: None,
             mission_type: None,
             base_payment: 0,
+            location: None
         };
         return mission 
     }
@@ -109,6 +113,9 @@ impl Mission{
     }
     pub fn set_payment(&mut self, payment: i32){
         self.base_payment = payment;
+    }
+    pub fn add_location(&mut self, location: Location){
+        self.location = Some(location);
     }
     pub fn briefing(self){
         if let Some(fixer) = self.fixer {
@@ -130,7 +137,17 @@ impl Mission{
             println!("Our client has been enable to identify their target, and will come back to us when they do."); // vec.last()
                 return 
         };
-        println!("Kill him and come back in on piece to get paid.");
+        if let Some(mission_type) = self.mission_type {
+            match mission_type {
+                MissionType::Assassination => println!("Kill him and come back in on piece to get paid."),
+                _ => println!("The client has no idea what he wants, so I'll have to come back to you.")
+            }
+        };
+        if let Some(location) = self.location {
+            println!("From the infos given by our client, the hideout is in {}, an {} {}.", location.name, location.location_status, location.location_type);
+        } else {
+            println!("Our client has no idea where anything happens, we'll have to wait for him.");
+        };
         println!("Payment is {} nuyens.", self.base_payment); //println!("Budget is 3000 nuyens, 1000 in advance, plus a 400 nuyens fee for not being polite enough");
     }
 }
@@ -141,7 +158,8 @@ pub struct World{
     last_char_id: i32,
     pub characters: Vec<Character>,
     character_used_names: Vec<String>,
-    faction_used_names: Vec<String>
+    faction_used_names: Vec<String>,
+    pub locations: Vec<Location>
 }
 impl World{
     pub fn new() -> World {
@@ -149,7 +167,8 @@ impl World{
             last_char_id: 0,
             characters: Vec::new(),
             character_used_names: Vec::new(),
-            faction_used_names: Vec::new()
+            faction_used_names: Vec::new(),
+            locations: Vec::new()
         };
         return world
     }
@@ -185,6 +204,15 @@ impl World{
         self.characters.push(character.clone());
         //self.characters.push(character.clone());
         return character.clone()
+    }
+    pub fn generate_location(&mut self) -> Location {
+        let location = Location {
+            name: "Anoubarak Station".to_string(),
+            location_type: "Forgotten station".to_string(),
+            location_status: "Abandonned".to_string()
+        };
+        self.locations.push(location.clone());
+        return location.clone()
     }
 }
 
@@ -229,6 +257,12 @@ pub fn generate_random_rank_name() -> String {
     return name
 }
 
+#[derive(Clone, Debug)]
+pub struct Location{
+    pub name: String,
+    pub location_type: String,
+    pub location_status: String
+}
 
 #[derive(Clone, Debug)]
 pub struct Background {
