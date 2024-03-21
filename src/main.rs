@@ -1,5 +1,12 @@
 use rand::prelude::*;
 
+//v1. Generer une mission avec du contenu aleatoire, avec une forme de cohérence. Se traduit en briefing + elements gameplay exploitables.
+//v2. Generer plusieurs missions, avec du contenu créé ou réutilisé, qui conserve sa coherence, et avec une progression dans l'apparence de difficulté.
+//v3. Forcer la generation des missions autour d'une thématique "compagne", c'est à dire une continuité dans les personnages et factions impliquées.
+//v4. Diviser les Missions en scenario, avec des segments / objectifs intermediaires pour permettre une progression de l'intrigue dans le cadre de cette mission.
+
+
+// 
 fn main() {
     let mut world = World::new();
     generate_story(&mut world);
@@ -13,7 +20,7 @@ pub fn generate_story(world: &mut World){
     println!("Our client wants to remain anonym so we will call him 'Mr Johnson' as usual.");   // OK // TODO : pronouns
     println!("I'll be sure to apply the anonymous fee on him.");    // OK // TODO : Pronouns, payment modifier
     println!("The target is Meathead, an ancient member of the Hell Angels gang going solo on the drug trade.");    // OK 
-    println!("From the infos given by our mr Johnson, Meathead's hideout is in Anoubarak Station, abandonned a long time ago.");    // NOK : //TODO : Hint & details on it. // Location
+    println!("From the infos given by our mr Johnson, Meathead's hideout is in Anoubarak Station, abandonned a long time ago.");    //OK
     println!("He's there with some friends and maybe a few locals he recruited to start his business.");    // NOK : //TODO : Hint on target army / antagonists.
     println!("Kill him and come back in on piece to get paid.");
     println!("Budget is 3000 nuyens, 1000 in advance, plus a 400 nuyens fee for not being polite enough");
@@ -250,11 +257,84 @@ pub fn generate_random_rank_name() -> String {
     let mut name = "".to_string();
     name += match rand {
         0 => "Leader",
-        1|2|3 => "lieutenant",
-        4|5|6 => "Enforcer",
+        1|2 => "lieutenant",
+        3|4|5 => "Enforcer",
         _ => "meatbag"
     };
     return name
+}
+
+pub fn generate_random_prefix_name() -> String {
+    let mut rng = rand::thread_rng();
+    let rand = rng.gen_range(0..10);
+    let mut name = "".to_string();   
+    name += match rand {
+        0 => "dévasté",
+        1 => "abandonné",
+        2 => "délabré",
+        3 => "residentiel",
+        4 => "corporatiste",
+        5 => "toxique",
+        6 => "sécurisé",
+        7 => "luxueux",
+        8 => "gouvernemental",
+        9 => "d'affaire",
+        _ => ""
+    };
+    return "bla".to_string() 
+}
+
+pub fn generate_random_distrinct_name() -> String {
+    let mut rng = rand::thread_rng();
+    let rand = rng.gen_range(0..10);
+    let mut name = "".to_string();   
+    name += match rand {
+        0 => "Renton",
+        1 => "Tacoma",
+        2 => "Puyallup",
+        3 => "Redmond",
+        4 => "Barrens",
+        5 => "Bellevue",
+        _ => ""
+    };
+    return "bla".to_string() 
+}
+
+pub fn generate_random_location_name() -> String {
+    let mut rng = rand::thread_rng();
+    let rand = rng.gen_range(0..10);
+    let mut name = "".to_string(); 
+    name += match rand {
+        0 => "centre d'entrainement",
+        1 => "usine",
+        2 => "maison de passe",
+        3 => "gare ferrovière",
+        4 => "boite de nuit",
+        5 => "restaurant",
+        6 => "port",
+        7 => "immeuble",
+        8 => "prison",
+        9 => "residence",
+        10 => "mine",
+        11 => "gallerie marchande",
+        12 => "Ghetto",
+        13 => "décharge",
+        14 => "egouts",
+        15 => "tunnels",
+        16 => "hopital",
+        17 => "arcologie",
+        18 => "complexe sportif",
+        19 => "club",
+        20 => "caserne militaire",
+        21 => "casino",
+        22 => "parc zoologique",
+        23 => "batiment",
+        _ => "immeuble"
+    };
+    let prefix = generate_random_prefix_name();
+    let district = generate_random_distrinct_name();
+    let full_name = format!("{} {} {}", prefix, name, district);
+    return full_name.to_string()
 }
 
 #[derive(Clone, Debug)]
